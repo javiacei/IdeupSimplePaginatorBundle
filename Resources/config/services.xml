@@ -9,7 +9,7 @@
   </parameters>
 
   <services>
-      <service id="ideup.simple_paginator" class="%simple_paginador.class%">
+      <service id="ideup.simple_paginator" class="%simple_paginator.class%">
           <argument type="service" id="request" strict="false" />
       </service>
   </services>
