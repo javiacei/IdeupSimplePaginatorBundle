@@ -22,11 +22,6 @@ class IdeupSimplePaginatorExtension extends Extension
         // registering services
         $loader = new XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.xml');
-
-        // registering twig extension
-        $definition = new Definition('Ideup\SimplePaginatorBundle\Twig\Extension\PaginateExtension');
-        $definition->addTag('twig.extension');
-        $container->setDefinition('paginate_extension', $definition);
     }
 
     // sounds like this is not needed anymore since Symfony2 calls 'load' method automatically now

@@ -13,6 +13,7 @@ namespace Ideap\SimplePaginatorBundle\Twig\Extension;
 
 use Ideup\SimplePaginatorBundle\Paginator\Paginator as Paginator;
 
+
 class PaginatorExtension extends \Twig_Extension {
 
   public function getFilters() {
