@@ -32,7 +32,8 @@ class Paginator
   public function transformQuery(Query &$query)
   {
     // TODO: Don't get results and then count. Only call doctrine method that internally count the results (look for)
-    $this->totalItems   = count($query->getResult());
+    // The only way this can hold is if we work with Doctrine Collections \Doctrine\Common\Collections\Collection
+    $this->totalItems   = $query->getResult()->count();
     $this->pages        = ceil($this->totalItems / $this->limit);
 
     $query->setMaxResults($this->limit);
@@ -42,11 +43,13 @@ class Paginator
   }
 
   // TODO: TwigExtension
+  // implementing an extension elsewhere and calling this whole class from there
   public function render()
   {
     $url = $this->request->getBaseUrl() . $this->request->getPathInfo();
 
-    $strPaginator = "<ul id='paginate_elements'><li class='left'><a href='$url?limit={$this->limit}&page=1'>First</a></li>";
+    $strPaginator = "<ul id='paginate_elements'>";
+    $strPaginator .= "<li class='left'><a href='$url?limit={$this->limit}&page=1'>First</a></li>";
 
     if ($this->page != 1){
       $strPaginator .= "<li class='previous'><a href='$url?limit={$this->limit}&page={$this->getPrevious()}'>Previous</a></li>";
@@ -57,7 +60,9 @@ class Paginator
     if ($this->page != $this->pages){
       $strPaginator .= "<li class='next'><a href='$url?limit={$this->limit}&page={$this->getNext()}'>Next</a></li>";
     }
-    $strPaginator .= "<li class='right'><a href='$url?limit={$this->limit}&page={$this->pages}'>Last</a></li></ul>";
+
+    $strPaginator .= "<li class='right'><a href='$url?limit={$this->limit}&page={$this->pages}'>Last</a></li>";
+    $strPaginator .= "</ul>";
 
     return $strPaginator;
   }
