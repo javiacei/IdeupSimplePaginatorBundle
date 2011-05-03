@@ -1,9 +1,9 @@
-This is a fork taken from Ideaup and improved
+This is a fork taken from Ideup and improved
 
 Authors:
 
  cordoval
- ideaup
+ javiacei
 
 
 Logs:
