@@ -30,7 +30,7 @@ class Paginator
   {
     // TODO: Don't get results and then count. Only call doctrine method that internally count the results (look for)
     // The only way this can hold is if we work with Doctrine Collections \Doctrine\Common\Collections\Collection
-    $this->totalItems   = $query->getResult()->count();
+    $this->totalItems   = count($query->getResult());
     $this->pages        = ceil($this->totalItems / $this->limit);
 
     $query->setMaxResults($this->limit);
