@@ -1,8 +1,4 @@
 <?php
-/**
- * GNFCustomerManagerExtension class definition
- * @copyright 2011 ideup!
- */
 
 namespace Ideup\SimplePaginatorBundle\DependencyInjection;
 
@@ -28,9 +24,9 @@ class IdeupSimplePaginatorExtension extends Extension
         $loader->load('services.xml');
 
         // registering twig extension
-        $definition = new Definition('Ideaup\SimplePaginatorBundle\TwigExtension\MyTwigExtension');
+        $definition = new Definition('Ideup\SimplePaginatorBundle\Twig\Extension\PaginateExtension');
         $definition->addTag('twig.extension');
-        $container->setDefinition('my_twig_extension', $definition);
+        $container->setDefinition('paginate_extension', $definition);
     }
 
     // sounds like this is not needed anymore since Symfony2 calls 'load' method automatically now

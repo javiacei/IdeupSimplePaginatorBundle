@@ -1,11 +1,6 @@
-This is a fork taken from Ideup and improved
-
 Authors:
-
- cordoval
-
  javiacei
-
+ cordoval
 
 Logs:
 
