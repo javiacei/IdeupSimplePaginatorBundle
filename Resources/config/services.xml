@@ -5,11 +5,11 @@
     xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
   <parameters>
-      <parameter key="simple_paginador.class">Ideup\SimplePaginatorBundle\Paginator\Paginator</parameter>
+      <parameter key="simple_paginator.class">Ideup\SimplePaginatorBundle\Paginator\Paginator</parameter>
   </parameters>
 
   <services>
-      <service id="ideup.simple_paginator" class="%simple_paginador.class%">
+      <service id="ideup.simple_paginator" class="%simple_paginator.class%">
           <argument type="service" id="request" strict="false" />
       </service>
   </services>
