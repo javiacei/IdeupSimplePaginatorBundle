@@ -26,7 +26,7 @@ class Paginator
     $this->limit        = ($requestLimit = $request->query->get('limit')) ? $requestLimit : 10;
   }
 
-  public function transformQuery(Query &$query)
+  public function transformQuery(Query $query)
   {
     // TODO: Don't get results and then count. Only call doctrine method that internally count the results (look for)
     // The only way this can hold is if we work with Doctrine Collections \Doctrine\Common\Collections\Collection
@@ -97,6 +97,14 @@ class Paginator
   {
     $first = $this->getDisplayedPagesFrom();
     return (($first + $this->limit) > $this->totalItems) ? $this->totalItems : ($first + $this->limit) - 1;
+  }
+
+  public function getTotalItems(){
+    return $this->totalItems;
+  }
+
+  public function getPagesNumber(){
+    return $this->pages;
   }
 
 }
