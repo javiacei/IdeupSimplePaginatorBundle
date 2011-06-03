@@ -46,31 +46,43 @@ class Paginator
     $strPaginator = 
       " <ul id='paginate_elements'>
           <li class='left'>
-            <a href='$url?limit={$this->limit}&page=1'>First</a>
+            <a href='$url?limit={$this->limit}&page=1'>Primera</a>
           </li>"
       ;
 
     if ($this->page != 1){
       $strPaginator .= 
         " <li class='previous'>
-            <a href='$url?limit={$this->limit}&page={$this->getPrevious()}'>Previous</a>
+            <a href='$url?limit={$this->limit}&page={$this->getPrevious()}'>Anterior</a>
+          </li>"
+        ;
+    }else { // DISABLED
+      $strPaginator .= 
+        " <li class='previous disabled'>
+            <a>Anterior</a>
           </li>"
         ;
     }
 
-    $strPaginator .= "<li class='actual'>{$this->getDisplayedPagesFrom()} - {$this->getDisplayedPagesTo()}</li>";
+    $strPaginator .= "<li class='actual'>Páginas: {$this->getDisplayedPagesFrom()} - {$this->getDisplayedPagesTo()}</li>";
 
     if ($this->page != $this->pages){
       $strPaginator .= 
         " <li class='next'>
-            <a href='$url?limit={$this->limit}&page={$this->getNext()}'>Next</a>
+            <a href='$url?limit={$this->limit}&page={$this->getNext()}'>Siguiente</a>
+          </li>"
+        ;
+    }else { // DISABLED
+      $strPaginator .= 
+        " <li class='next disabled'>
+            <a>Siguiente</a>
           </li>"
         ;
     }
 
     $strPaginator .=
       " <li class='right'>
-          <a href='$url?limit={$this->limit}&page={$this->pages}'>Last</a>
+          <a href='$url?limit={$this->limit}&page={$this->pages}'>Última</a>
         </li>"
       ;
     $strPaginator .= "</ul>";
