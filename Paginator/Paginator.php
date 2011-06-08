@@ -108,6 +108,14 @@ class Paginator
     }*/
 
     /**
+     * @return int
+     */
+    public function getCurrentPage()
+    {
+        return $this->currentPage;
+    }
+
+    /**
      * Get the next page number
      *
      * @return int
@@ -127,16 +135,27 @@ class Paginator
         return $this->currentPage - 1;
     }
 
-    /*public function getDisplayedPagesFrom()
+    /**
+     * @return int
+     */
+    public function getMaxPageInRange($id = null)
     {
-        return (($this->page - 1) * $this->limit) + 1;
+        $min = $this->getMinPageInRange();
+
+        if ($min + $this->maxPagerItems > $this->getLastPage($id)) {
+          return $this->getLastPage($id);
+        }
+
+        return $min + $this->maxPagerItems;
     }
 
-    public function getDisplayedPagesTo()
+    /**
+     * @return int
+     */
+    public function getMinPageInRange()
     {
-        $first = $this->getDisplayedPagesFrom();
-        return (($first + $this->limit) > $this->totalItems) ? $this->totalItems : ($first + $this->limit) - 1;
-    }*/
+        return (int)floor($this->currentPage/$this->maxPagerItems) * $this->maxPagerItems + $this->getFirstPage();
+    }
 
     /**
      * Get the total items in the non-paginated version of the query
@@ -159,5 +178,13 @@ class Paginator
     public function getLastPage($id = null)
     {
         return (int)ceil($this->getTotalItems($id) / $this->itemsPerPage);
+    }
+
+    /**
+     * @return int
+     */
+    public function getFirstPage()
+    {
+        return 1;
     }
 }

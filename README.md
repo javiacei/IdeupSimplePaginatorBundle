@@ -2,7 +2,7 @@
 
 This package contains a bundle to easily paginate complex queries efficiently and without effort.
 
-## Including SimplePaginatorBundle in your code
+## How to include SimplePaginatorBundle in your code
 
 You should clone this repository in your Symfony's `vendor/bundles` directory, add it into `autoload.php` file:
 
@@ -72,6 +72,29 @@ Note that the variable `$users` contains only the paginated subset of the Doctri
 `$paginator` object to obtain information about the pagination process; such as how many items are in the full
 collection, in wich page are we, wich is the last page, etc.
 
+## How to render a paginator in your view
+
+    <ul id="paginate_elements">
+      {% if paginator.currentPage > 1 %}
+        <li><a href="#">previous</a></li>
+      {% else %}
+        <li class="left_disabled"><a href="#">previous</a></li>
+      {% endif %}
+
+      {% for page in paginator.minPageInRange..paginator.maxPageInRange %}
+        {% if page == paginator.currentPage %}
+          <li><a class="current" href="#">{{ page }}</a></li>
+        {% else %}
+          <li><a href="#">{{ page }}</a></li>
+        {% endif %}
+      {% endfor %}
+
+      {% if paginator.currentPage < paginator.lastPage %}
+        <li class="right"><a href="#">next</a></li>
+      {% else %}
+        <li class="right_disabled">next</li>
+      {% endif %}
+    </ul>
 
 ## Authors
 
