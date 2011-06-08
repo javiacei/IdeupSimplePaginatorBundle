@@ -28,30 +28,30 @@ Since the `Paginator::paginate()` method needs a `Query` object to work with, yo
 
   * Before
 
-      class User extends EntityRepository 
-      {
-        public function findByMyCriteria() {
-          $query = $this->_em->createQuery('...');
-          return $query->getResult();
+        class User extends EntityRepository 
+        {
+          public function findByMyCriteria() {
+            $query = $this->_em->createQuery('...');
+            return $query->getResult();
+          }
         }
-      }
 
   * After
 
-      class User extends EntityRepository 
-      {
-        public function findByMyCriteria() {
-          return $this->findByMyCriteriaDQL()->getResult();
+        class User extends EntityRepository 
+        {
+          public function findByMyCriteria() {
+            return $this->findByMyCriteriaDQL()->getResult();
+          }
+
+          public function findByMyCriteriaDQL() {
+            $query = $this->_em->createQuery('...');
+            return $query;
+          }
         }
 
-        public function findByMyCriteriaDQL() {
-          $query = $this->_em->createQuery('...');
-          return $query;
-        }
-      }
-
-In your controller you can be able to instantiate the paginator service. SimplePaginatorBundle is smart enough to
-detect the current page and the maximum items per page from the Request context, so you don't need to type more 
+In your controller you can be able to instantiate the paginator service. `SimplePaginatorBundle` is smart enough to
+detect the current page and the maximum items per page from the `Request` context, so you don't need to type more 
 boilerplate code!
 
     class MyController extends Controller
@@ -73,30 +73,34 @@ Note that the variable `$users` contains only the paginated subset of the Doctri
 collection, in wich page are we, wich is the last page, etc.
 
 
-Authors:
- - javiacei
- - cordoval
- - Moisés Maciá
+## Authors
 
-Changelog:
- - Added dependency to DoctrineExtensions\Paginate to handle proper pagination (see https://github.com/beberlei/DoctrineExtensions)
- - Added support to paginate multiple lists at once
- - Changed the Paginador class name to Paginator
-   this is how services.xml defines our service, with a parameter set to the class implementing pagination and passing a service id
- 
-       <parameters>
-           <parameter key="simple_paginador.class">Ideup\SimplePaginatorBundle\Paginator\Paginator</parameter>
-       </parameters>
- 
-       <services>
-           <service id="ideup.simple_paginator" class="%simple_paginator.class%">
-               <argument type="service" id="request" strict="false" />
-           </service>
-       </services>
- 
- - implemented Twig extension and calling the Class Paginator from there
+* javiacei
+* cordoval
+* Moisés Maciá
 
-TODO:
-  1 - Testing it with a hello world sample
-  2 - Making it work with a more generic Doctrine Collections
+## Changelog
+
+* Added dependency to DoctrineExtensions\Paginate to handle proper pagination (see https://github.com/beberlei/DoctrineExtensions)
+ 
+* Added support to paginate multiple lists at once
+ 
+* Changed the Paginador class name to Paginator, this is how services.xml defines our service, with a parameter set to the class implementing pagination and passing a service id
+ 
+    <parameters>
+      <parameter key="simple_paginador.class">Ideup\SimplePaginatorBundle\Paginator\Paginator</parameter>
+    </parameters>
+ 
+    <services>
+      <service id="ideup.simple_paginator" class="%simple_paginator.class%">
+        <argument type="service" id="request" strict="false" />
+      </service>
+    </services>
+ 
+* implemented Twig extension and calling the Class Paginator from there
+
+## TODO
+
+* Testing it with a hello world sample
+* Making it work with a more generic Doctrine Collections
 
