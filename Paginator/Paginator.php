@@ -53,7 +53,8 @@ class Paginator
     public function paginate(Query $query, $id = null)
     {
         $this->totalItems[md5($id)] = (int)Paginate::getTotalQueryResults($query);
-        return $query->setFirstResult($this->currentPage - 1)->setMaxResults($this->itemsPerPage);
+        $offset = ($this->currentPage - 1) * $this->itemsPerPage;
+        return $query->setFirstResult($offset)->setMaxResults($this->itemsPerPage);
     }
 
     /*public function render()
