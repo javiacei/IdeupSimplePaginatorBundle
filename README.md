@@ -111,6 +111,60 @@ collection, in wich page are we, wich is the last page, etc.
 </ul>
 ```
 
+## How to include more than one paginator in a single view
+
+`SimplePaginatorBundle` supports multiple paginators, you should specify an id in your controller and view calls. Note 
+that you can modify the particular properties of each paginator.
+
+```php
+<?php
+class MyController extends Controller
+{
+  public function listAction() {
+    $paginator = $this->get('ideup.simple_paginator');
+
+    $paginator->setItemsPerPage(25, 'users');
+    $users = $paginator->paginate($em->getRepository('MyBundle:User')->findByMyCriteriaDQL(), 'users')->getResult();
+
+    $paginator->setItemsPerPage(5, 'groups');
+    $groups = $paginator->paginate($em->getRepository('MyBundle:User')->findByMyCriteriaDQL(), 'groups')->getResult();
+
+    $vars = array(
+        'users'     => $users,
+        'groups'    => $groups,
+        'paginator' => $paginator);
+    return $this->render('MyBundle:User:list.html.twig', $vars);
+  }
+}
+
+```
+
+In the view you also need to specify the paginator id:
+
+```jinja
+<ul id="paginate_elements">
+  {% if paginator.currentPage('users') > 1 %}
+    <li><a href="{{ path('my_controller_route', {'page': paginator.previousPage('users'), 'paginatorId': 'users'}) }}">previous</a></li>
+  {% else %}
+    <li class="left_disabled"><a href="#">previous</a></li>
+  {% endif %}
+
+  {% for page in paginator.minPageInRange('users')..paginator.maxPageInRange('users') %}
+    {% if page == paginator.currentPage('users') %}
+      <li><a class="current" href="#">{{ page }}</a></li>
+    {% else %}
+      <li><a href="{{ path('my_controller_route', {'page': page, 'paginatorId': 'users'}) }}">{{ page }}</a></li>
+    {% endif %}
+  {% endfor %}
+
+  {% if paginator.currentPage('users') < paginator.lastPage('users') %}
+    <li class="right"><a href="{{ path('my_controller_route', {'page': paginator.nextPage('users'), 'paginatorId': 'users'}) }}">next</a></li>
+  {% else %}
+    <li class="right_disabled">next</li>
+  {% endif %}
+</ul>
+```
+
 ## Authors
 
 * javiacei

@@ -10,11 +10,11 @@ use DoctrineExtensions\Paginate\Paginate;
 class Paginator
 {
     /**
-     * @var int $currentPage
+     * @var array $currentPage
      */
     protected $currentPage;
     /**
-     * @var int $itemsPerPage
+     * @var array $itemsPerPage
      */
     protected $itemsPerPage;
     /**
@@ -32,14 +32,57 @@ class Paginator
      */
     public function __construct(Request $request)
     {
+        $paginatorId = $request->query->get('paginatorId');
+
         $page = (int)$request->query->get('page');
-        $this->currentPage = ($page > 0) ? $page : 1;
+        $this->currentPage = array(
+            md5($paginatorId) => ($page > 0) ? $page : $this->getFirstPage(),
+        );
 
+        // TODO: get the default values from config.yml
         $itemsPerPage = (int)$request->query->get('limit');
-        $this->itemsPerPage = ($itemsPerPage > 0) ? $itemsPerPage : 10; // TODO: get the default value from config.yml
+        $this->setItemsPerPage(($itemsPerPage > 0) ? $itemsPerPage : 10, $paginatorId);
 
-        $this->maxPagerItems = 10;
-        $this->totalItems = array(md5(null) => 0);
+        $this->setMaxPagerItems(10, $paginatorId);
+        $this->totalItems = array(md5($paginatorId) => 0);
+    }
+
+    /**
+     * @param string $id
+     * @return int
+     */
+    public function getItemsPerPage($id = null)
+    {
+        $hash = md5($id);
+        return isset($this->itemsPerPage[$hash]) ? $this->itemsPerPage[$hash] : $this->itemsPerPage[md5(null)];
+    }
+
+    /**
+     * @param int $itemsPerPage
+     * @param string $id
+     */
+    public function setItemsPerPage($itemsPerPage, $id = null)
+    {
+        $this->itemsPerPage[md5($id)] = (int)$itemsPerPage;
+    }
+
+    /**
+     * @param string $id
+     * @return int
+     */
+    public function getMaxPagerItems($id = null)
+    {
+        $hash = md5($id);
+        return isset($this->maxPagerItems[$hash]) ?$this->maxPagerItems[$hash] : $this->maxPagerItems[md5(null)];
+    }
+
+    /**
+     * @param int $maxPagerItems
+     * @param string $id
+     */
+    public function setMaxPagerItems($maxPagerItems, $id = null)
+    {
+        $this->maxPagerItems[md5($id)] = (int)$maxPagerItems;
     }
 
     /**
@@ -53,87 +96,40 @@ class Paginator
     public function paginate(Query $query, $id = null)
     {
         $this->totalItems[md5($id)] = (int)Paginate::getTotalQueryResults($query);
-        $offset = ($this->currentPage - 1) * $this->itemsPerPage;
-        return $query->setFirstResult($offset)->setMaxResults($this->itemsPerPage);
+        $offset = ($this->getCurrentPage($id) - 1) * $this->getItemsPerPage($id);
+        return $query->setFirstResult($offset)->setMaxResults($this->getItemsPerPage($id));
     }
 
-    /*public function render()
-    {
-        $url = $this->request->getBaseUrl() . $this->request->getPathInfo();
-
-        $strPaginator =
-            " <ul id='paginate_elements'>
-            <li class='left'>
-            <a href='$url?limit={$this->limit}&page=1'>Primera</a>
-            </li>"
-            ;
-
-        if ($this->page != 1){
-            $strPaginator .=
-                " <li class='previous'>
-                <a href='$url?limit={$this->limit}&page={$this->getPrevious()}'>Anterior</a>
-                </li>"
-                ;
-        }else { // DISABLED
-            $strPaginator .=
-                " <li class='previous disabled'>
-                <a>Anterior</a>
-                </li>"
-                ;
-        }
-
-        $strPaginator .= "<li class='actual'>Páginas: {$this->getDisplayedPagesFrom()} - {$this->getDisplayedPagesTo()}</li>";
-
-        if ($this->page != $this->pages){
-            $strPaginator .=
-                " <li class='next'>
-                <a href='$url?limit={$this->limit}&page={$this->getNext()}'>Siguiente</a>
-                </li>"
-                ;
-        }else { // DISABLED
-            $strPaginator .=
-                " <li class='next disabled'>
-                <a>Siguiente</a>
-                </li>"
-                ;
-        }
-
-        $strPaginator .=
-            " <li class='right'>
-            <a href='$url?limit={$this->limit}&page={$this->pages}'>Última</a>
-            </li>"
-            ;
-        $strPaginator .= "</ul>";
-
-        return $strPaginator;
-    }*/
-
     /**
+     * @param string $id
      * @return int
      */
-    public function getCurrentPage()
+    public function getCurrentPage($id = null)
     {
-        return $this->currentPage;
+        $hash = md5($id);
+        return isset($this->currentPage[$hash]) ? $this->currentPage[$hash] : $this->getFirstPage();
     }
 
     /**
      * Get the next page number
      *
+     * @param string $id
      * @return int
      */
-    public function getNextPage()
+    public function getNextPage($id = null)
     {
-        return $this->currentPage + 1;
+        return $this->getCurrentPage($id) + 1;
     }
 
     /**
      * Get the previous page number
      *
+     * @param string $id
      * @return int
      */
-    public function getPreviousPage()
+    public function getPreviousPage($id = null)
     {
-        return $this->currentPage - 1;
+        return $this->getCurrentPage($id) - 1;
     }
 
     /**
@@ -141,21 +137,23 @@ class Paginator
      */
     public function getMaxPageInRange($id = null)
     {
-        $min = $this->getMinPageInRange();
+        $min = $this->getMinPageInRange($id);
 
-        if ($min + $this->maxPagerItems > $this->getLastPage($id)) {
+        if ($min + $this->getMaxPagerItems($id) > $this->getLastPage($id)) {
           return $this->getLastPage($id);
         }
 
-        return $min + $this->maxPagerItems;
+        return $min + $this->getMaxPagerItems($id);
     }
 
     /**
+     * @param string $id
      * @return int
      */
-    public function getMinPageInRange()
+    public function getMinPageInRange($id = null)
     {
-        return (int)floor($this->currentPage/$this->maxPagerItems) * $this->maxPagerItems + $this->getFirstPage();
+        $maxItems = $this->getMaxPagerItems($id);
+        return (int)floor($this->getCurrentPage($id)/$maxItems) * $maxItems + $this->getFirstPage();
     }
 
     /**
@@ -178,7 +176,7 @@ class Paginator
      */
     public function getLastPage($id = null)
     {
-        return (int)ceil($this->getTotalItems($id) / $this->itemsPerPage);
+        return (int)ceil($this->getTotalItems($id) / $this->getItemsPerPage($id));
     }
 
     /**
