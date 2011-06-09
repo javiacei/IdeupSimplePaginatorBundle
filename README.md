@@ -7,6 +7,7 @@ This package contains a bundle to easily paginate complex queries efficiently an
 You should clone this repository in your Symfony's `vendor/bundles` directory, add it into `autoload.php` file:
 
 ```php
+<?php
 $loader->registerNamespaces(array(
   'Symfony' => array(__DIR__.'/../vendor/symfony/src', __DIR__.'/../vendor/bundles'),
   ...
@@ -16,6 +17,7 @@ $loader->registerNamespaces(array(
 ... and in your `AppKernel.php` file:
 
 ```php
+<?php
 public function registerBundles()
 {
     $bundles = array(
@@ -31,6 +33,7 @@ Since the `Paginator::paginate()` method needs a `Query` object to work with, yo
   * Before
 
 ```php
+<?php
 class User extends EntityRepository 
 {
   public function findByMyCriteria() {
@@ -43,6 +46,7 @@ class User extends EntityRepository
   * After
 
 ```php
+<?php
 class User extends EntityRepository 
 {
   public function findByMyCriteria() {
@@ -61,6 +65,7 @@ detect the current page and the maximum items per page from the `Request` contex
 boilerplate code!
 
 ```php
+<?php
 class MyController extends Controller
 {
   public function listAction() {
