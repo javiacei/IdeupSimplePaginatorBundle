@@ -90,7 +90,7 @@ collection, in wich page are we, wich is the last page, etc.
 ```jinja
 <ul id="paginate_elements">
   {% if paginator.currentPage > 1 %}
-    <li><a href="#">previous</a></li>
+    <li><a href="{{ path('my_controller_route', {'page': paginator.previousPage}) }}">previous</a></li>
   {% else %}
     <li class="left_disabled"><a href="#">previous</a></li>
   {% endif %}
@@ -99,12 +99,12 @@ collection, in wich page are we, wich is the last page, etc.
     {% if page == paginator.currentPage %}
       <li><a class="current" href="#">{{ page }}</a></li>
     {% else %}
-      <li><a href="#">{{ page }}</a></li>
+      <li><a href="{{ path('my_controller_route', {'page': page}) }}">{{ page }}</a></li>
     {% endif %}
   {% endfor %}
 
   {% if paginator.currentPage < paginator.lastPage %}
-    <li class="right"><a href="#">next</a></li>
+    <li class="right"><a href="{{ path('my_controller_route', {'page': paginator.nextPage}) }}">next</a></li>
   {% else %}
     <li class="right_disabled">next</li>
   {% endif %}
