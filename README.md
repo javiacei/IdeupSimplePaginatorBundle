@@ -197,4 +197,5 @@ In the view you also need to specify the paginator id:
 
 * Testing it with a hello world sample
 * Making it work with a more generic Doctrine Collections
+* Make a twig extension to render the paginator
 
