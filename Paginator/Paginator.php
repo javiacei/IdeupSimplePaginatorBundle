@@ -18,7 +18,7 @@ class Paginator
      */
     protected $itemsPerPage;
     /**
-     * @var int $maxPagerItems
+     * @var array $maxPagerItems
      */
     protected $maxPagerItems;
     /**
@@ -33,6 +33,7 @@ class Paginator
     public function __construct(Request $request)
     {
         $paginatorId = $request->query->get('paginatorId');
+        $this->setFallbackValues();
 
         $page = (int)$request->query->get('page');
         $this->currentPage = array(
@@ -45,6 +46,15 @@ class Paginator
 
         $this->setMaxPagerItems(10, $paginatorId);
         $this->totalItems = array(md5($paginatorId) => 0);
+    }
+
+    private function setFallbackValues()
+    {
+        $hash = md5(null);
+        $this->currentPage[$hash]   = 0;
+        $this->itemsPerPage[$hash]  = 10;
+        $this->maxPagerItems[$hash] = 10;
+        $this->totalItems[$hash]    = 0;
     }
 
     /**
