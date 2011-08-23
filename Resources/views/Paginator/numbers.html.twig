@@ -1,0 +1,35 @@
+{% if paginator.totalItems(paginatorId) > paginator.itemsPerPage(paginatorId) %}
+	{% for page in paginator.firstPage(paginatorId)..paginator.lastPage(paginatorId) %}
+		{% if page == paginator.currentPage(paginatorId) %}
+			<{{tag}} class="{{currentClass}}">{{ page }}</{{tag}}>
+			{%if (page != (paginator.currentPage(paginatorId)+modulus)) and (page != paginator.lastPage(paginatorId)) and separator != '' %}
+				<{{tag}}>{{separator}}</{{tag}}>
+			{% endif %}
+		{% elseif (page >= paginator.currentPage(paginatorId)-modulus) and (page <= paginator.currentPage(paginatorId)+modulus) %}
+			<{{tag}}><a href="{{ path(routeName, {'page': page, 'paginatorId': paginatorId}) }}">{{ page }}</a></{{tag}}> 
+			{%if page != (paginator.currentPage(paginatorId)+modulus) and (page != paginator.lastPage(paginatorId)) and separator != '' %}
+				 <{{tag}}>{{separator}}</{{tag}}>
+			{% endif %}
+		{% elseif page <= first or (page >= paginator.lastPage(paginatorId)-last+1) %}			
+			{% if page == (paginator.lastPage(paginatorId)-last+1) %}
+				{% if (paginator.lastPage(paginatorId)-last) == (paginator.currentPage(paginatorId)+modulus) %}
+					{% if separator!='' %}<{{tag}}>{{separator}}</{{tag}}>{% endif %}
+				{% else %}
+					{% if separator!='' %}<{{tag}}>...</{{tag}}>{% endif %}
+				{% endif %}
+			{% elseif page > last %}
+				{% if separator!='' %}<{{tag}}>{{separator}}</{{tag}}>{% endif %}
+			{% endif %}				
+			<{{tag}}><a href="{{ path(routeName, {'page': page, 'paginatorId': paginatorId}) }}">{{ page }}</a></{{tag}}>
+			{% if page == first %}
+				{% if first == (paginator.currentPage(paginatorId)-modulus-1) %}
+					{% if separator!='' %}<{{tag}}>{{separator}}</{{tag}}>{% endif %}
+				{% else %}
+					{% if separator!='' %}<{{tag}}>...</{{tag}}>{% endif %}
+				{% endif %}
+			{% elseif page < first %}
+				{% if separator!='' %}<{{tag}}>{{separator}}</{{tag}}>{% endif %}
+			{% endif %}		 
+		{% endif %}
+	{% endfor %}
+{% endif %}
