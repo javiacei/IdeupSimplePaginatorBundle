@@ -26,6 +26,11 @@ class Paginator
      */
     protected $totalItems;
 
+	/**
+     * @var array $offset
+     */
+    protected $offset;
+
 
     /**
      * @param Symfony\Component\HttpFoundation\Request $request
@@ -96,6 +101,15 @@ class Paginator
     }
 
     /**
+     * @param int $offset
+     * @param string $id
+     */
+    public function setOffset($offset, $id = null)
+    {
+        $this->offset[md5($id)] = (int)$offset;
+    }
+
+    /**
      * Transforms the given Doctrine DQL into a paginated query
      * If you need to paginate various queries in the same controller, you need to specify an $id
      *
@@ -107,6 +121,7 @@ class Paginator
     {
         $this->totalItems[md5($id)] = (int)Paginate::getTotalQueryResults($query);
         $offset = ($this->getCurrentPage($id) - 1) * $this->getItemsPerPage($id);
+		$this->setOffset($offset, $id);
         return $query->setFirstResult($offset)->setMaxResults($this->getItemsPerPage($id));
     }
 
@@ -195,5 +210,17 @@ class Paginator
     public function getFirstPage()
     {
         return 1;
+    }
+
+    /**
+     * Get the initial offset of current page
+     *
+     * @param string $id
+     * @return int
+     */
+    public function getOffset($id = null)
+    {
+        $hash = md5($id);
+        return isset($this->offset[$hash]) ? $this->offset[$hash] : 0;
     }
 }
