@@ -26,11 +26,10 @@ class Paginator
      */
     protected $totalItems;
 
-	/**
+    /**
      * @var array $offset
      */
     protected $offset;
-
 
     /**
      * @param Symfony\Component\HttpFoundation\Request $request
@@ -121,7 +120,7 @@ class Paginator
     {
         $this->totalItems[md5($id)] = (int)Paginate::getTotalQueryResults($query);
         $offset = ($this->getCurrentPage($id) - 1) * $this->getItemsPerPage($id);
-		$this->setOffset($offset, $id);
+        $this->setOffset($offset, $id);
         return $query->setFirstResult($offset)->setMaxResults($this->getItemsPerPage($id));
     }
 
