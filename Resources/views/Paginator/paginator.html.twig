@@ -1,0 +1,22 @@
+<ul id="paginate_elements">
+    {% if showPrevious %}
+        <li><a href="{{ path(route, {'page': previousPage, 'paginatorId': paginatorId}) }}">{{ previousText }}</a></li>
+    {% else %}
+        <li class="{{ hiddenPrevious }}"><a href="#">{{ previousText }}</a></li>
+    {% endif %}
+
+    <!-- TODO -->
+    {% for page in paginator.minPageInRange('users')..paginator.maxPageInRange('users') %}
+        {% if page == paginator.currentPage('users') %}
+            <li><a class="current" href="#">{{ page }}</a></li>
+        {% else %}
+            <li><a href="{{ path('my_controller_route', {'page': page, 'paginatorId': 'users'}) }}">{{ page }}</a></li>
+        {% endif %}
+    {% endfor %}
+
+    {% if paginator.currentPage('users') < paginator.lastPage('users') %}
+        <li class="right"><a href="{{ path('my_controller_route', {'page': paginator.nextPage('users'), 'paginatorId': 'users'}) }}">next</a></li>
+    {% else %}
+        <li class="right_disabled">next</li>
+    {% endif %}
+</ul>
