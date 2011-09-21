@@ -29,22 +29,29 @@ class PaginatorHelper extends Helper
         $view = (!is_null($view)) ? $view : 'IdeupSimplePaginatorBundle:Paginator:simple-paginator-list-view.html.twig';
 
         $defaultOptions = array(
-            'container_class'       => '',
+            'container_class'       => 'simple_paginator',
             'paginator'             => $this->paginator,
             'id'                    => $id,
             'route'                 => $route,
+
             'previousPage'          => $this->paginator->getPreviousPage($id),
             'previosPageText'       => 'previous',
             'previousEnabledClass'  => 'left',
             'previousDisabledClass' => 'left_disabled',
+
             'minPage'               => $this->paginator->getMinPageInRange($id),
             'maxPage'               => $this->paginator->getMaxPageInRange($id),
+
             'currentPage'           => $this->paginator->getCurrentPage($id),
             'currentClass'          => 'current',
+
+            'firstPage'             => $this->paginator->getFirstPage(),
             'lastPage'              => $this->paginator->getLastPage($id),
+
+            'nextPage'              => $this->paginator->getNextPage($id),
+            'nextPageText'          => 'next',
             'nextEnabledClass'      => 'right',
-            'nextDisabledClass'     => 'right_disabled',
-            'nextPageText'          => 'next'
+            'nextDisabledClass'     => 'right_disabled'            
         );
 
         $options = \array_merge($defaultOptions, $options);

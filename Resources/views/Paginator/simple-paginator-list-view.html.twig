@@ -1,4 +1,4 @@
-<ul {% if container_class %} class="{{ container_class }} {% endif %}">
+<ul class="{{ container_class }}">
     {% if currentPage > 1 %}
         <li><a class="{{ previousEnabledClass }}" href="{{ path(route, {'page': previousPage, 'paginatorId': id}) }}">{{ previosPageText }}</a></li>
     {% else %}
@@ -14,7 +14,7 @@
     {% endfor %}
 
     {% if currentPage < lastPage %}
-        <li class="{{ nextEnabledClass }}"><a href="{{ path(route, {'page': paginator.nextPage(id), 'paginatorId': id}) }}">{{ nextPageText }}</a></li>
+        <li class="{{ nextEnabledClass }}"><a href="{{ path(route, {'page': nextPage, 'paginatorId': id}) }}">{{ nextPageText }}</a></li>
     {% else %}
         <li class="{{ nextDisabledClass }}">{{ nextPageText }}</li>
     {% endif %}

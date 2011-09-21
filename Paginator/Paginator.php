@@ -1,12 +1,22 @@
 <?php
-/* vim: set expandtab tabstop=4 shiftwidth=4: */
 
 namespace Ideup\SimplePaginatorBundle\Paginator;
 
-use Symfony\Component\HttpFoundation\Request as Request;
-use Doctrine\ORM\Query as Query;
-use DoctrineExtensions\Paginate\Paginate;
+use 
+    Symfony\Component\HttpFoundation\Request,
+    Doctrine\ORM\Query as Query,
+    DoctrineExtensions\Paginate\Paginate
+;
 
+/**
+ * IdeupSimplePaginatorBundle
+ *
+ * Class that defines the Dependency Injection Extension to expose the bundle's semantic configuration
+ * @package IdeupSimplePaginatorBundle
+ * @subpackage Paginator
+ * @author Francisco Javier Aceituno <javier.aceituno@ideup.com>
+ * @author Moises Maciá <moises.macia@ideup.com>
+ */
 class Paginator
 {
     /**
