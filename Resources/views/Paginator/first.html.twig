@@ -1,7 +1,0 @@
-{% if paginator.totalItems(paginatorId) > paginator.itemsPerPage(paginatorId) %}
-	{% if paginator.currentPage(paginatorId) > 1 %}
-		<{{tag}}><a href="{{ path(routeName, {'page': paginator.firstPage(paginatorId), 'paginatorId': paginatorId}) }}">{{title}}</a></{{tag}}> 
-	{% else %}
-		<{{tag}} class="{{disabledClass}}">{{disabledTitle}}</{{tag}}> 
-	{% endif %}
-{% endif %}

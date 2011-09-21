@@ -1,0 +1,21 @@
+<ul {% if container_class %} class="{{ container_class }} {% endif %}">
+    {% if currentPage > 1 %}
+        <li><a class="{{ previousEnabledClass }}" href="{{ path(route, {'page': previousPage, 'paginatorId': id}) }}">{{ previosPageText }}</a></li>
+    {% else %}
+        <li class="{{ previousDisabledClass }}"><a href="#">{{ previosPageText }}</a></li>
+    {% endif %}
+    
+    {% for page in minPage..maxPage %}
+        {% if page == currentPage %}
+            <li><a class="{{ currentClass }}" href="#">{{ page }}</a></li>
+        {% else %}
+            <li><a href="{{ path(route, {'page': page, 'paginatorId': id}) }}">{{ page }}</a></li>
+        {% endif %}
+    {% endfor %}
+
+    {% if currentPage < lastPage %}
+        <li class="{{ nextEnabledClass }}"><a href="{{ path(route, {'page': paginator.nextPage(id), 'paginatorId': id}) }}">{{ nextPageText }}</a></li>
+    {% else %}
+        <li class="{{ nextDisabledClass }}">{{ nextPageText }}</li>
+    {% endif %}
+</ul>
