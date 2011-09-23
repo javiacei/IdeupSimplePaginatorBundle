@@ -3,7 +3,8 @@
 namespace Ideup\SimplePaginatorBundle\Paginator;
 
 use 
-    Symfony\Component\HttpFoundation\Request
+    Symfony\Component\HttpFoundation\Request,
+    Ideup\SimplePaginatorBundle\Paginator\Adapter\AdapterFactory
 ;
 
 /**
@@ -36,11 +37,15 @@ class Paginator
      */
     protected $totalItems;
 
+    protected $adapterFactory;
+
     /**
      * @param Symfony\Component\HttpFoundation\Request $request
      */
-    public function __construct(Request $request)
-    {       
+    public function __construct(Request $request, AdapterFactory $adapterFactory)
+    {
+        $this->adapterFactory = $adapterFactory;
+
         $paginatorId = $request->get('paginatorId');
         $this->setFallbackValues();
 
@@ -107,22 +112,6 @@ class Paginator
         return $this;
     }
     
-    protected function getAdapterOf($collection)
-    {
-        if (\is_array($collection)) {
-            $className = 'Array';
-        } else {
-            $r = new \ReflectionClass($collection);
-            $className = $r->getName();
-        }
-        
-        $adapterName =
-            __NAMESPACE__ . '\\Adapter\\' . $className . 'Adapter'
-        ;
-
-        return new $adapterName($collection);
-    }
-
     /**
      * Transforms the given Doctrine DQL into a paginated query
      * If you need to paginate various queries in the same controller, you need to specify an $id
@@ -133,7 +122,7 @@ class Paginator
      */
     public function paginate($collection, $id = null)
     {
-        $adapter = $this->getAdapterOf($collection);
+        $adapter = $this->adapterFactory->createAdapter($collection);
 
         $this->totalItems[md5($id)] = $adapter->getTotalResults();
         $offset = ($this->getCurrentPage($id) - 1) * $this->getItemsPerPage($id);
