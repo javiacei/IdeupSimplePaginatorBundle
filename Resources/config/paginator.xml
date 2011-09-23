@@ -5,12 +5,16 @@
     xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
   <parameters>
+      <parameter key="simple_paginator_adapter_factory.class">Ideup\SimplePaginatorBundle\Paginator\Adapter\AdapterFactory</parameter>
       <parameter key="simple_paginator.class">Ideup\SimplePaginatorBundle\Paginator\Paginator</parameter>
   </parameters>
 
   <services>
+      <service id="ideup.simple_paginator.adapter_factory" class="%simple_paginator_adapter_factory.class%">
+      </service>
       <service id="ideup.simple_paginator" class="%simple_paginator.class%">
           <argument type="service" id="request" strict="false" />
+          <argument type="service" id="ideup.simple_paginator.adapter_factory" strict="false" />
       </service>
   </services>
 
