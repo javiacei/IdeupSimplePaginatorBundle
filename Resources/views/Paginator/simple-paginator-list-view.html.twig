@@ -1,21 +1,63 @@
 <ul class="{{ container_class }}">
+    <!-- FIRST -->
     {% if currentPage > 1 %}
-        <li><a class="{{ previousEnabledClass }}" href="{{ path(route, {'page': previousPage, 'paginatorId': id}) }}">{{ previosPageText }}</a></li>
+        {% set rParams =  {'page': firstPage, 'paginatorId': id} | merge(routeParams) %}
+        <li class="{{ firstEnabledClass }}">
+            <a href="{{ path(route, rParams) }}">{{ firstPageText }}</a>
+        </li>
     {% else %}
-        <li class="{{ previousDisabledClass }}"><a href="#">{{ previosPageText }}</a></li>
+        <li class="{{ firstDisabledClass }}">
+            {{ firstPageText }}
+        </li>
     {% endif %}
-    
+
+    <!-- PREVIOUS -->
+    {% if currentPage > 1 %}   
+        {% set rParams =  {'page': previousPage, 'paginatorId': id} | merge(routeParams) %}
+        <li class="{{ previousEnabledClass }}">
+            <a href="{{ path(route, rParams) }}">{{ previosPageText }}</a>
+        </li>
+    {% else %}
+        <li class="{{ previousDisabledClass }}">
+            {{ previosPageText }}
+        </li>
+    {% endif %}
+
+    <!-- NUMBERS -->
     {% for page in minPage..maxPage %}
         {% if page == currentPage %}
-            <li><a class="{{ currentClass }}" href="#">{{ page }}</a></li>
+            <li class="{{ currentClass }}">
+                {{ page }}
+            </li>
         {% else %}
-            <li><a href="{{ path(route, {'page': page, 'paginatorId': id}) }}">{{ page }}</a></li>
+            {% set rParams =  {'page': page, 'paginatorId': id} | merge(routeParams) %}
+            <li>
+                <a href="{{ path(route, rParams) }}">{{ page }}</a>
+            </li>
         {% endif %}
     {% endfor %}
 
+    <!-- NEXT -->
     {% if currentPage < lastPage %}
-        <li class="{{ nextEnabledClass }}"><a href="{{ path(route, {'page': nextPage, 'paginatorId': id}) }}">{{ nextPageText }}</a></li>
+        {% set rParams =  {'page': nextPage, 'paginatorId': id} | merge(routeParams) %}
+        <li class="{{ nextEnabledClass }}">
+            <a href="{{ path(route, rParams) }}">{{ nextPageText }}</a>
+        </li>
     {% else %}
-        <li class="{{ nextDisabledClass }}">{{ nextPageText }}</li>
+        <li class="{{ nextDisabledClass }}">
+            {{ nextPageText }}
+        </li>
+    {% endif %}
+
+    <!-- LAST -->
+    {% if currentPage < lastPage %}
+        {% set rParams =  {'page': lastPage, 'paginatorId': id} | merge(routeParams) %}
+        <li class="{{ lastEnabledClass }}">
+            <a href="{{ path(route, rParams) }}">{{ lastPageText }}</a>
+        </li>
+    {% else %}
+        <li class="{{ lastDisabledClass }}">
+            {{ lastPageText }}
+        </li>
     {% endif %}
 </ul>

@@ -14,6 +14,8 @@ use Symfony\Component\Config\FileLocator;
  * @package IdeupSimplePaginatorBundle
  * @subpackage DependencyInjection
  * @author Francisco Javier Aceituno <javier.aceituno@ideup.com>
+ * @author Moises Maciá <moises.macia@ideup.com>
+ * @author Gustavo Piltcher
  */
 class IdeupSimplePaginatorExtension extends Extension
 {

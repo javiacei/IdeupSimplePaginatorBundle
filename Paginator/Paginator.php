@@ -3,15 +3,12 @@
 namespace Ideup\SimplePaginatorBundle\Paginator;
 
 use 
-    Symfony\Component\HttpFoundation\Request,
-    Doctrine\ORM\Query as Query,
-    DoctrineExtensions\Paginate\Paginate
+    Symfony\Component\HttpFoundation\Request
 ;
 
 /**
- * IdeupSimplePaginatorBundle
+ * Paginator
  *
- * Class that defines the Dependency Injection Extension to expose the bundle's semantic configuration
  * @package IdeupSimplePaginatorBundle
  * @subpackage Paginator
  * @author Francisco Javier Aceituno <javier.aceituno@ideup.com>
@@ -23,43 +20,42 @@ class Paginator
      * @var array $currentPage
      */
     protected $currentPage;
+    
     /**
      * @var array $itemsPerPage
      */
     protected $itemsPerPage;
+    
     /**
      * @var array $maxPagerItems
      */
     protected $maxPagerItems;
+    
     /**
      * @var array $totalItems
      */
     protected $totalItems;
 
     /**
-     * @var array $offset
-     */
-    protected $offset;
-
-    /**
      * @param Symfony\Component\HttpFoundation\Request $request
      */
     public function __construct(Request $request)
-    {
-        $paginatorId = $request->query->get('paginatorId');
+    {       
+        $paginatorId = $request->get('paginatorId');
         $this->setFallbackValues();
 
-        $page = (int)$request->query->get('page');
+        $page = (int)$request->get('page');
+        
         $this->currentPage = array(
             md5($paginatorId) => ($page > 0) ? $page : $this->getFirstPage(),
         );
 
-        // TODO: get the default values from config.yml
         $itemsPerPage = (int)$request->query->get('limit');
         $this->setItemsPerPage(($itemsPerPage > 0) ? $itemsPerPage : 10, $paginatorId);
 
-        $this->setMaxPagerItems(10, $paginatorId);
-        $this->totalItems = array(md5($paginatorId) => 0);
+        // TODO: MaxPagerItems load by config.yml
+        $this->setMaxPagerItems(3, $paginatorId);
+        $this->totalItems = array(md5($paginatorId) => 0);        
     }
 
     private function setFallbackValues()
@@ -67,8 +63,8 @@ class Paginator
         $hash = md5(null);
         $this->currentPage[$hash]   = 0;
         $this->itemsPerPage[$hash]  = 10;
-        $this->maxPagerItems[$hash] = 10;
-        $this->totalItems[$hash]    = 0;
+        $this->maxPagerItems[$hash] = 3;
+        $this->totalItems[$hash]    = 0;        
     }
 
     /**
@@ -88,6 +84,7 @@ class Paginator
     public function setItemsPerPage($itemsPerPage, $id = null)
     {
         $this->itemsPerPage[md5($id)] = (int)$itemsPerPage;
+        return $this;
     }
 
     /**
@@ -107,33 +104,42 @@ class Paginator
     public function setMaxPagerItems($maxPagerItems, $id = null)
     {
         $this->maxPagerItems[md5($id)] = (int)$maxPagerItems;
+        return $this;
     }
-
-    /**
-     * @param int $offset
-     * @param string $id
-     */
-    public function setOffset($offset, $id = null)
+    
+    protected function getAdapterOf($collection)
     {
-        $this->offset[md5($id)] = (int)$offset;
+        if (\is_array($collection)) {
+            $className = 'Array';
+        } else {
+            $r = new \ReflectionClass($collection);
+            $className = $r->getName();
+        }
+        
+        $adapterName =
+            __NAMESPACE__ . '\\Adapter\\' . $className . 'Adapter'
+        ;
+
+        return new $adapterName($collection);
     }
 
     /**
      * Transforms the given Doctrine DQL into a paginated query
      * If you need to paginate various queries in the same controller, you need to specify an $id
      *
-     * @param Doctrine\ORM\Query $query
+     * @param mixed $collection
      * @param string $id
      * @return Doctrine\ORM\Query
      */
-    public function paginate(Query $query, $id = null)
+    public function paginate($collection, $id = null)
     {
-        $this->totalItems[md5($id)] = (int)Paginate::getTotalQueryResults($query);
-        $offset = ($this->getCurrentPage($id) - 1) * $this->getItemsPerPage($id);
-        $this->setOffset($offset, $id);
-        return $query->setFirstResult($offset)->setMaxResults($this->getItemsPerPage($id));
-    }
+        $adapter = $this->getAdapterOf($collection);
 
+        $this->totalItems[md5($id)] = $adapter->getTotalResults();
+        $offset = ($this->getCurrentPage($id) - 1) * $this->getItemsPerPage($id);
+
+        return $adapter->setOffset($offset)->setLength($this->getItemsPerPage($id));
+    }
     /**
      * @param string $id
      * @return int
@@ -177,7 +183,7 @@ class Paginator
           return $this->getLastPage($id);
         }
 
-        return $min + $this->getMaxPagerItems($id);
+        return $min + $this->getMaxPagerItems($id) - 1;
     }
 
     /**
@@ -185,9 +191,14 @@ class Paginator
      * @return int
      */
     public function getMinPageInRange($id = null)
-    {
-        $maxItems = $this->getMaxPagerItems($id);
-        return (int)floor($this->getCurrentPage($id)/$maxItems) * $maxItems + $this->getFirstPage();
+    {        
+        $offset = floor(($this->getMaxPagerItems($id) - 1)/2);
+        
+        if ($this->getCurrentPage($id) > $offset) {
+            return $this->getCurrentPage($id) - $offset;
+        }
+
+        return $this->getFirstPage();
     }
 
     /**
@@ -219,17 +230,5 @@ class Paginator
     public function getFirstPage()
     {
         return 1;
-    }
-
-    /**
-     * Get the initial offset of current page
-     *
-     * @param string $id
-     * @return int
-     */
-    public function getOffset($id = null)
-    {
-        $hash = md5($id);
-        return isset($this->offset[$hash]) ? $this->offset[$hash] : 0;
     }
 }
