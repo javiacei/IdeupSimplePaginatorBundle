@@ -1,4 +1,4 @@
-# SimplePaginator bundle for Symfony2/Doctrine2
+# SimplePaginator bundle for Symfony2/Doctrine2/Twig
 
 This package contains a bundle to easily paginate complex queries efficiently and without effort.
 
@@ -64,6 +64,8 @@ In your controller you can be able to instantiate the paginator service. `Simple
 detect the current page and the maximum items per page from the `Request` context, so you don't need to type more 
 boilerplate code!
 
+  * Before
+
 ```php
 <?php
 class MyController extends Controller
@@ -85,7 +87,30 @@ Note that the variable `$users` contains only the paginated subset of the Doctri
 `$paginator` object to obtain information about the pagination process; such as how many items are in the full
 collection, in wich page are we, wich is the last page, etc.
 
+  * After
+
+```php
+<?php
+class MyController extends Controller
+{
+  public function listAction() {
+    $paginator = $this->get('ideup.simple_paginator');
+
+    $users = $paginator->paginate($em->getRepository('MyBundle:User')->findByMyCriteriaDQL())->getResult();
+
+    $vars = array(
+        'users'     => $users,
+    );
+    return $this->render('MyBundle:User:list.html.twig', $vars);
+  }
+}
+```
+Note that now you don't need to pass `$paginator` variable to template unless you want to obtain information about
+pagination process.
+
 ## How to render a paginator in your view
+
+  * Before
 
 ```jinja
 <ul id="paginate_elements">
@@ -109,6 +134,49 @@ collection, in wich page are we, wich is the last page, etc.
     <li class="right_disabled">next</li>
   {% endif %}
 </ul>
+```
+
+  * After
+
+```jinja
+  {{ simple_paginator_render('my_controller_route') }}
+```
+You can to customize paginator view as follows:
+
+```jinja
+  {{ simple_paginator_render('my_controller_route', null, { params }) }}
+```
+where `params` can be:
+
+- 'container_class'         Default `simple_paginator`
+
+- 'previosPageText'         Default `previous`
+- 'previousEnabledClass'    Default `left`,
+- 'previousDisabledClass'   Default `left_disabled`,
+
+- 'firstPageText'           Default `first`,
+- 'firstEnabledClass'       Default `first`,
+- 'firstDisabledClass'      Default `first_disabled`,
+
+- 'lastPageText'            Default `last`,
+- 'lastEnabledClass'        Default `last`,
+- 'lastDisabledClass'       Default `last_disabled`,
+
+- 'nextPageText'            Default `next`,
+- 'nextEnabledClass'        Default `right',
+- 'nextDisabledClass'       Default `right_disabled`,
+
+- 'routeParams'             Default `{}`
+
+For example, if you want to customize paginator view to show a route that receive a 
+parameter `id` and you want to change container class:
+
+```jinja
+  {{ simple_paginator_render('my_controller_route', null, { 
+       'routeParams' : {'id' : id},
+       'container_class' : 'custom_simple_paginator_class'
+     })
+  }}
 ```
 
 ## How to include more than one paginator in a single view

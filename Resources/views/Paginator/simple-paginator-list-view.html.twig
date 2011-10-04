@@ -15,7 +15,7 @@
     {% if currentPage > 1 %}   
         {% set rParams =  {'page': previousPage, 'paginatorId': id} | merge(routeParams) %}
         <li class="{{ previousEnabledClass }}">
-            <a href="{{ path(route, rParams) }}">{{ previosPageText }}</a>
+            <a href="{{ path(route, rParams) }}">{{ previousPageText }}</a>
         </li>
     {% else %}
         <li class="{{ previousDisabledClass }}">

@@ -42,7 +42,7 @@ class PaginatorHelper extends Helper
             'id'                    => $id,
             'route'                 => $route,
             
-            'previosPageText'       => 'previous',
+            'previousPageText'      => 'previous',
             'previousEnabledClass'  => 'left',
             'previousDisabledClass' => 'left_disabled',
 
