@@ -146,7 +146,7 @@ You can to customize paginator view as follows:
 ```jinja
   {{ simple_paginator_render('my_controller_route', null, { params }) }}
 ```
-where `params` can be:
+where `params` may be:
 
 - 'container_class'         Default `simple_paginator`
 
@@ -178,11 +178,42 @@ parameter `id` and you want to change container class:
      })
   }}
 ```
+If your needs are out of this sight you can customize it in your own view:
+
+```jinja
+  {{ simple_paginator_render('my_controller_route', null, {....}, 'MyBundle:MyViewFolder:MyViewFile.html.twig') }}
+```
+To create `MyBundle:MyViewFolder:MyViewFile.html.twig` copy from default template that is included inside the bundle
+`Resources\views\Paginator\simple-paginator-list-view.html.twig` and customize it in your own Bundle.
+
+For example, if you want only to show paginator numbers, your template sounds like this 
+
+`MyBundle\Resources\views\MyViewFolder\MyViewFile.html.twig`:
+
+```jinja
+<ul class="{{ container_class }}">
+    <!-- NUMBERS -->
+    {% for page in minPage..maxPage %}
+        {% if page == currentPage %}
+            <li class="{{ currentClass }}">
+                {{ page }}
+            </li>
+        {% else %}
+            {% set rParams =  {'page': page, 'paginatorId': id} | merge(routeParams) %}
+            <li>
+                <a href="{{ path(route, rParams) }}">{{ page }}</a>
+            </li>
+        {% endif %}
+    {% endfor %}
+</ul>
+```
 
 ## How to include more than one paginator in a single view
 
 `SimplePaginatorBundle` supports multiple paginators, you should specify an id in your controller and view calls. Note 
 that you can modify the particular properties of each paginator.
+
+  * Before
 
 ```php
 <?php
@@ -232,14 +263,66 @@ In the view you also need to specify the paginator id:
   {% endif %}
 </ul>
 ```
+  * After
+
+```php
+<?php
+class MyController extends Controller
+{
+  public function listAction() {
+    $paginator = $this->get('ideup.simple_paginator');
+
+    $users = $paginator
+      ->setItemsPerPage(25, 'users');
+      ->paginate($em->getRepository('MyBundle:User')->findByMyCriteriaDQL(), 'users')
+      ->getResult()
+    ;
+
+    // Now also we can paginate arrays
+    $allGroups = array('group1', 'group2', 'group3', 'group4', 'group5');
+
+    $groups = $paginator
+      ->setItemsPerPage(3, 'groups')
+      ->paginate($allGroups, 'groups')
+      ->getResult()
+    ;
+
+    $vars = array(
+        'users'     => $users,
+        'groups'    => $groups,
+    );
+    return $this->render('MyBundle:User:list.html.twig', $vars);
+  }
+}
+
+```
+
+In the view you also need to specify the paginator id:
+
+```jinja
+  {{ simple_paginator_render('my_controller_route', 'users', {....}) }}
+  
+  {{ simple_paginator_render('my_controller_route', 'groups', {....}) }}
+```
 
 ## Authors
 
-* javiacei
-* cordoval
+* Francisco Javier Aceituno
+* Luis Cordoval
 * Moisés Maciá
+* Gustavo Piltcher
 
 ## Changelog
+
+v0.91
+
+* Added support to paginate arrays.
+
+* Changed setter methods. Now this methods return paginate object.
+
+* Added twig support.
+
+v0.9
 
 * Added dependency to DoctrineExtensions\Paginate to handle proper pagination (see https://github.com/beberlei/DoctrineExtensions)
  
@@ -259,11 +342,7 @@ In the view you also need to specify the paginator id:
 </services>
 ```
  
-* implemented Twig extension and calling the Class Paginator from there
-
 ## TODO
-
+* Support more types
 * Testing it with a hello world sample
 * Making it work with a more generic Doctrine Collections
-* Make a twig extension to render the paginator
-
