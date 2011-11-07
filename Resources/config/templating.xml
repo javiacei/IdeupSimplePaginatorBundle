@@ -11,8 +11,7 @@
   <services>
       <service id="templating.helper.ideup.simple_paginator" class="%templating.helper.simple_paginator.class%">
           <tag name="templating.helper" alias="simple_paginator_helper" />
-		  <argument type="service" id="ideup.simple_paginator" />
- 		  <argument type="service" id="service_container" />
+          <argument type="service" id="service_container" />
       </service>
   </services>
 

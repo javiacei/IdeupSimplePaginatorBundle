@@ -5,8 +5,7 @@ namespace Ideup\SimplePaginatorBundle\Templating\Helper;
 use
     Doctrine\Common\Util\Debug,
     Symfony\Component\Templating\Helper\Helper,
-    Symfony\Component\DependencyInjection\ContainerInterface,
-    Ideup\SimplePaginatorBundle\Paginator\Paginator as Paginator
+    Symfony\Component\DependencyInjection\ContainerInterface
 ;
 
 /**
@@ -19,18 +18,16 @@ use
  */
 class PaginatorHelper extends Helper
 {
-    protected $paginator;
     protected $container;
 
-    public function __construct(Paginator $paginator, ContainerInterface $container)
+    public function __construct(ContainerInterface $container)
     {
-        $this->paginator = $paginator;
         $this->container = $container;
     }
 
     public function getPaginator()
     {
-        return $this->paginator;
+        return $this->container->get('ideup.simple_paginator');
     }
 
     public function render($route, $id = null, $options = array(), $view = null)    
@@ -50,22 +47,19 @@ class PaginatorHelper extends Helper
             'firstEnabledClass'     => 'first',
             'firstDisabledClass'    => 'first_disabled',
             
-            'firstPage'             => $this->paginator->getFirstPage(),
+            'firstPage'             => $this->getPaginator()->getFirstPage(),
 
-            'previousPage'          => $this->paginator->getPreviousPage($id),
+            'previousPage'          => $this->getPaginator()->getPreviousPage($id),
 
-            'minPage'               => $this->paginator->getMinPageInRange($id),
-            'maxPage'               => $this->paginator->getMaxPageInRange($id),
+            'minPage'               => $this->getPaginator()->getMinPageInRange($id),
+            'maxPage'               => $this->getPaginator()->getMaxPageInRange($id),
 
-            'currentPage'           => $this->paginator->getCurrentPage($id),
+            'currentPage'           => $this->getPaginator()->getCurrentPage($id),
             'currentClass'          => 'current',
 
-            'firstPage'             => $this->paginator->getFirstPage(),
-            'lastPage'              => $this->paginator->getLastPage($id),
+            'nextPage'              => $this->getPaginator()->getNextPage($id),
 
-            'nextPage'              => $this->paginator->getNextPage($id),
-
-            'lastPage'              => $this->paginator->getLastPage($id),
+            'lastPage'              => $this->getPaginator()->getLastPage($id),
 
             'lastPageText'          => 'last',
             'lastEnabledClass'      => 'last',

@@ -2,7 +2,7 @@
 
 namespace Ideup\SimplePaginatorBundle\Paginator;
 
-use 
+use
     Symfony\Component\HttpFoundation\Request,
     Ideup\SimplePaginatorBundle\Paginator\Adapter\AdapterFactory
 ;
@@ -21,17 +21,17 @@ class Paginator
      * @var array $currentPage
      */
     protected $currentPage;
-    
+
     /**
      * @var array $itemsPerPage
      */
     protected $itemsPerPage;
-    
+
     /**
      * @var array $maxPagerItems
      */
     protected $maxPagerItems;
-    
+
     /**
      * @var array $totalItems
      */
@@ -40,17 +40,19 @@ class Paginator
     protected $adapterFactory;
 
     /**
-     * @param Symfony\Component\HttpFoundation\Request $request
+     * @param Symfony\Component\HttpFoundation\Request $container
      */
-    public function __construct(Request $request, AdapterFactory $adapterFactory)
+    public function __construct(Request $container, AdapterFactory $adapterFactory)
     {
+        $request = $container->get('request');
+
         $this->adapterFactory = $adapterFactory;
 
         $paginatorId = $request->get('paginatorId');
         $this->setFallbackValues();
 
         $page = (int)$request->get('page');
-        
+
         $this->currentPage = array(
             md5($paginatorId) => ($page > 0) ? $page : $this->getFirstPage(),
         );
@@ -60,7 +62,7 @@ class Paginator
 
         // TODO: MaxPagerItems load by config.yml
         $this->setMaxPagerItems(3, $paginatorId);
-        $this->totalItems = array(md5($paginatorId) => 0);        
+        $this->totalItems = array(md5($paginatorId) => 0);
     }
 
     private function setFallbackValues()
@@ -69,7 +71,7 @@ class Paginator
         $this->currentPage[$hash]   = 0;
         $this->itemsPerPage[$hash]  = 10;
         $this->maxPagerItems[$hash] = 3;
-        $this->totalItems[$hash]    = 0;        
+        $this->totalItems[$hash]    = 0;
     }
 
     /**
@@ -111,7 +113,7 @@ class Paginator
         $this->maxPagerItems[md5($id)] = (int)$maxPagerItems;
         return $this;
     }
-    
+
     /**
      * Transforms the given Doctrine DQL into a paginated query
      * If you need to paginate various queries in the same controller, you need to specify an $id
@@ -180,9 +182,9 @@ class Paginator
      * @return int
      */
     public function getMinPageInRange($id = null)
-    {        
+    {
         $offset = floor(($this->getMaxPagerItems($id) - 1)/2);
-        
+
         if ($this->getCurrentPage($id) > $offset) {
             return $this->getCurrentPage($id) - $offset;
         }
