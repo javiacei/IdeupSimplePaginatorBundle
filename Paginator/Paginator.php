@@ -40,12 +40,10 @@ class Paginator
     protected $adapterFactory;
 
     /**
-     * @param Symfony\Component\HttpFoundation\Request $container
+     * @param Symfony\Component\HttpFoundation\Request $request
      */
-    public function __construct(Request $container, AdapterFactory $adapterFactory)
+    public function __construct(Request $request, AdapterFactory $adapterFactory)
     {
-        $request = $container->get('request');
-
         $this->adapterFactory = $adapterFactory;
 
         $paginatorId = $request->get('paginatorId');
