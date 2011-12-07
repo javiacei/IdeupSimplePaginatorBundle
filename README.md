@@ -148,25 +148,27 @@ You can to customize paginator view as follows:
 ```
 where `params` may be:
 
-- 'container_class'         Default `simple_paginator`
+- `routeParams`, the params needed by the controller route (default: `{}`)
 
-- 'previosPageText'         Default `previous`
-- 'previousEnabledClass'    Default `left`,
-- 'previousDisabledClass'   Default `left_disabled`,
+- `container_class`, the CSS class applied to the `<ul>` element that wraps the paginator (default: `simple_paginator`)
 
-- 'firstPageText'           Default `first`,
-- 'firstEnabledClass'       Default `first`,
-- 'firstDisabledClass'      Default `first_disabled`,
+- `firstPageText`, the text shown on the first page link (default: `first`)
+- `firstEnabledClass`, the CSS class applied to the first page link if there is a first page (default: `first`)
+- `firstDisabledClass`, the CSS class applied to the first page text when there is no first page (default: `first_disabled`)
 
-- 'lastPageText'            Default `last`,
-- 'lastEnabledClass'        Default `last`,
-- 'lastDisabledClass'       Default `last_disabled`,
+- `previousPageText`, the text shown on the previous page link (default: `previous`)
+- `previousEnabledClass`, the CSS class applied to the previous page link if there is a previous page (default: `left`)
+- `previousDisabledClass`, the CSS class applied to the previous page text when there is no previous page (default: `left_disabled`)
 
-- 'nextPageText'            Default `next`,
-- 'nextEnabledClass'        Default `right',
-- 'nextDisabledClass'       Default `right_disabled`,
+- `currentClass`, the CSS class applied to the `<li>` element that wraps the current page link (default: `current`)
 
-- 'routeParams'             Default `{}`
+- `nextPageText`, the text shown on the next page link (default: `next`)
+- `nextEnabledClass`, the CSS class applied to the next page link if there is a next page (default: `right`)
+- `nextDisabledClass`, the CSS class applied to the next page text when there is no next page (default: `right_disabled`)
+
+- `lastPageText`, the text shown on the last page link (default: `last`)
+- `lastEnabledClass`, the CSS class applied to the last page link if there is a last page (default: `last`)
+- `lastDisabledClass`, the CSS class applied to the last page text when there is no last page (default: `last_disabled`)
 
 For example, if you want to customize paginator view to show a route that receive a 
 parameter `id` and you want to change container class:
