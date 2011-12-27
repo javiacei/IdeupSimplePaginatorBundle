@@ -41,6 +41,7 @@ class Paginator
 
     /**
      * @param Symfony\Component\HttpFoundation\Request $request
+     * @param Ideup\SimplePaginatorBundle\Paginator\Adapter\AdapterFactory $adapterFactory
      */
     public function __construct(Request $request, AdapterFactory $adapterFactory)
     {
@@ -63,6 +64,10 @@ class Paginator
         $this->totalItems = array(md5($paginatorId) => 0);
     }
 
+    /**
+     *  Sets default values
+     *  @return void
+     */
     private function setFallbackValues()
     {
         $hash = md5(null);
@@ -85,6 +90,7 @@ class Paginator
     /**
      * @param int $itemsPerPage
      * @param string $id
+     * @return Ideup\SimplePaginatorBundle\Paginator
      */
     public function setItemsPerPage($itemsPerPage, $id = null)
     {
@@ -162,6 +168,7 @@ class Paginator
     }
 
     /**
+     * @param string $id
      * @return int
      */
     public function getMaxPageInRange($id = null)
