@@ -349,8 +349,3 @@ v0.9
   </service>
 </services>
 ```
- 
-## TODO
-* Support more types
-* Testing it with a hello world sample
-* Making it work with a more generic Doctrine Collections
