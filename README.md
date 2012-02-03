@@ -2,6 +2,12 @@
 
 This package contains a bundle to easily paginate complex queries efficiently and without effort.
 
+## Dependencies
+
+For the bundle to work properly you should also install `DoctrineExtensions\Paginate`. 
+
+Bundle and instruccions at https://github.com/beberlei/DoctrineExtensions
+
 ## How to include SimplePaginatorBundle in your code
 
 You should clone this repository in your Symfony's `vendor/bundles` directory, add it into `autoload.php` file:
