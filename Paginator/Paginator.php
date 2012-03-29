@@ -135,6 +135,7 @@ class Paginator
 
         return $adapter->setOffset($offset)->setLength($this->getItemsPerPage($id));
     }
+
     /**
      * @param string $id
      * @return int
@@ -142,7 +143,12 @@ class Paginator
     public function getCurrentPage($id = null)
     {
         $hash = md5($id);
-        return isset($this->currentPage[$hash]) ? $this->currentPage[$hash] : $this->getFirstPage();
+        if (isset($this->currentPage[$hash])){
+            ($this->currentPage[$hash] > $this->getLastPage()) ? $page = $this->getLastPage() : $page = $this->currentPage[$hash];
+        } else {
+            $page = $this->getFirstPage();
+        }
+        return $page;
     }
 
     /**
