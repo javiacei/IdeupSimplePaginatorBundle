@@ -143,7 +143,7 @@ class Paginator
     public function getCurrentPage($id = null)
     {
         $hash = md5($id);
-        if (isset($this->currentPage[$hash])){
+        if (isset($this->currentPage[$hash])) {
             ($this->currentPage[$hash] > $this->getLastPage()) ? $page = $this->getLastPage() : $page = $this->currentPage[$hash];
         } else {
             $page = $this->getFirstPage();
@@ -223,7 +223,8 @@ class Paginator
      */
     public function getLastPage($id = null)
     {
-        return (int)ceil($this->getTotalItems($id) / $this->getItemsPerPage($id));
+        $totalItems = ($this->getTotalItems($id) > 0) ? $this->getTotalItems($id) : 1;
+        return (int)ceil($totalItems / $this->getItemsPerPage($id));
     }
 
     /**
