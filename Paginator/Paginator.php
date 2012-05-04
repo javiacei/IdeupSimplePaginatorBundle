@@ -144,7 +144,7 @@ class Paginator
     {
         $hash = md5($id);
         if (isset($this->currentPage[$hash])) {
-            ($this->currentPage[$hash] > $this->getLastPage()) ? $page = $this->getLastPage() : $page = $this->currentPage[$hash];
+            ($this->currentPage[$hash] > $this->getLastPage($id)) ? $page = $this->getLastPage($id) : $page = $this->currentPage[$hash];
         } else {
             $page = $this->getFirstPage();
         }
