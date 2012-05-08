@@ -118,7 +118,7 @@ class Paginator
         return $this;
     }
 
-      /**
+    /**
      * Transforms the given Doctrine DQL into a paginated query
      * If you need to paginate various queries in the same controller, you need to specify an $id
      *
@@ -131,37 +131,11 @@ class Paginator
         $adapter = $this->adapterFactory->createAdapter($collection);
 
         $this->totalItems[md5($id)] = $adapter->getTotalResults();
-        $offset = $this->calculateOffset($id);
+        $offset = ($this->getCurrentPage($id) - 1) * $this->getItemsPerPage($id);
 
         return $adapter->setOffset($offset)->setLength($this->getItemsPerPage($id));
     }
-    
-    /**
-     * @param string $id
-     * @return int 
-     */    
-    private function calculateOffset($id = null ){
-        return ($this->getCurrentPage($id) - 1) * $this->getItemsPerPage($id);
-    }
-    
-    /**
-     * @param string $id
-     * @return int 
-     */    
-    public function getStartPageItem($id = null){
-        return $this->calculateOffset($id) +1;
-    }
-    
-    /**
-     * @param string $id
-     * @return int 
-     */    
-    public function getEndPageItem($id = null){
-        $endPageItem= $this->calculateOffset($id) +  $this->getItemsPerPage($id);
-        $totalItems= $this->getTotalItems($id);
-        return  $endPageItem<$totalItems ? $endPageItem: $totalItems;
-    }
-    
+
     /**
      * @param string $id
      * @return int
