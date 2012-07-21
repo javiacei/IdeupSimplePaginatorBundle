@@ -7,9 +7,14 @@
     "authors": [
         {
             "name":     "Francisco Javier Aceituno Lapido",
-            "homepage": "https://github.com/javiacei/IdeupSimplePaginatorBundle",
+            "homepage": "https://github.com/javiacei",
             "email":    "fco.javier.aceituno@gmail.com"
-        }     
+        },
+        {
+            "name":     "Moisés Maciá",
+            "homepage": "https://github.com/mmacia",
+            "email":    "mmacia@gmail.com"
+        }
     ],
     "require": {
         "php":             ">=5.3.0",
