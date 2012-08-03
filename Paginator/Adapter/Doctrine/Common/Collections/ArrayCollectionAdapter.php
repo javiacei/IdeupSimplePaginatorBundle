@@ -1,6 +1,6 @@
 <?php
 
-namespace Ideup\SimplePaginatorBundle\Paginator\Adapter;
+namespace Ideup\SimplePaginatorBundle\Paginator\Adapter\Doctrine\Common\Collections;
 
 use
     Ideup\SimplePaginatorBundle\Paginator\Adapter\AdapterInterface
