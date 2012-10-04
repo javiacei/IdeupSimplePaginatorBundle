@@ -6,7 +6,7 @@ This package contains a bundle to easily paginate complex queries efficiently an
 
 For the bundle to work properly you should also install `DoctrineExtensions\Paginate`. 
 
-Bundle and instruccions at https://github.com/beberlei/DoctrineExtensions
+Bundle and instructions at https://github.com/beberlei/DoctrineExtensions
 
 ## How to include SimplePaginatorBundle in your code
 
