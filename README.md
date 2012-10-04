@@ -7,6 +7,30 @@ This package contains a bundle to easily paginate complex queries efficiently an
 For the bundle to work properly you should also install `DoctrineExtensions\Paginate`. 
 
 Bundle and instructions at https://github.com/beberlei/DoctrineExtensions
+## Installation using composer
+
+Add IdeupSimplePaginatorBundle in your composer.json:
+
+```js
+"require": {
+        "php": ">=5.3.3",
+        "symfony/symfony": "2.1.*",
+          .
+          .
+          .
+          .
+          .
+        "ideup/simple-paginator-bundle":"*"
+    }
+```
+
+Now download and install the bundle
+
+``` bash
+$ php composer.phar update ideup/simple-paginator-bundle
+```
+
+Composer will install the bundle to your project's `vendor/ideup` directory.
 
 ## How to include SimplePaginatorBundle in your code
 
