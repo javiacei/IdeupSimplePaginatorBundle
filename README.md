@@ -337,13 +337,6 @@ In the view you also need to specify the paginator id:
   {{ simple_paginator_render('my_controller_route', 'groups', {....}) }}
 ```
 
-## Authors
-
-* Francisco Javier Aceituno
-* Luis Cordoval
-* Moisés Maciá
-* Gustavo Piltcher
-
 ## Changelog
 
 v0.91
