@@ -61,8 +61,8 @@ class QueryAdapter implements AdapterInterface
     /**
      * {@inheritdoc }
      */
-    public function getResult()
+    public function getResult($hidrationMode=null)
     {
-        return $this->query->getResult();
+        return $this->query->getResult($hidrationMode);
     }
 }
