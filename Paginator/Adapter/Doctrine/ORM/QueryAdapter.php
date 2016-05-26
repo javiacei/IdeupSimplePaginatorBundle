@@ -2,13 +2,9 @@
 
 namespace Ideup\SimplePaginatorBundle\Paginator\Adapter\Doctrine\ORM;
 
-use
-    Doctrine\ORM\Query,
-    DoctrineExtensions\Paginate\Paginate,
-
-    Ideup\SimplePaginatorBundle\Paginator\Adapter\AdapterInterface
-;
-
+use Doctrine\ORM\Query;
+use Doctrine\ORM\Tools\Pagination\Paginator;
+use Ideup\SimplePaginatorBundle\Paginator\Adapter\AdapterInterface;
 
 /**
  * QueryAdapter
@@ -18,8 +14,8 @@ use
  * @author Francisco Javier Aceituno <javier.aceituno@ideup.com>
 
  */
-class QueryAdapter implements AdapterInterface
-{
+class QueryAdapter implements AdapterInterface {
+
     protected $query;
 
     /**
@@ -27,24 +23,24 @@ class QueryAdapter implements AdapterInterface
      * 
      * @param Doctrine\ORM\Query $query
      */
-    public function __construct(Query $query)
-    {
+    public function __construct(Query $query) {
         $this->query = $query;
     }
 
     /**
      * {@inheritdoc }
      */
-    public function getTotalResults()
-    {
-        return (int)Paginate::getTotalQueryResults($this->query);
+    public function getTotalResults() {
+        $paginate = new Paginator($this->query);
+        $paginate->count();
+        return (int) $paginate->count();
+//        return (int)Paginate::getTotalQueryResults($this->query);
     }
 
     /**
      * {@inheritdoc }
      */
-    public function setOffset($offset)
-    {
+    public function setOffset($offset) {
         $this->query->setFirstResult($offset);
         return $this;
     }
@@ -52,8 +48,7 @@ class QueryAdapter implements AdapterInterface
     /**
      * {@inheritdoc }
      */
-    public function setLength($length)
-    {
+    public function setLength($length) {
         $this->query->setMaxResults($length);
         return $this;
     }
@@ -61,8 +56,8 @@ class QueryAdapter implements AdapterInterface
     /**
      * {@inheritdoc }
      */
-    public function getResult($hidrationMode=null)
-    {
+    public function getResult($hidrationMode = null) {
         return $this->query->getResult($hidrationMode);
     }
+
 }
