@@ -24,5 +24,11 @@
     "autoload": {
         "psr-0": { "Ideup\\SimplePaginatorBundle": "" }
     },
-    "target-dir": "Ideup/SimplePaginatorBundle"
+    "target-dir": "Ideup/SimplePaginatorBundle",
+
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.0.x-dev"
+        }
+    }
 }
