@@ -18,17 +18,11 @@
     ],
     "require": {
         "php":             ">=5.3.0",
-        "symfony/symfony": "2.8 | 3.0",
+        "symfony/symfony": "^2.8 | ^3.0",
         "beberlei/DoctrineExtensions":  "v1.0.9"
     },
     "autoload": {
         "psr-0": { "Ideup\\SimplePaginatorBundle": "" }
     },
-    "target-dir": "Ideup/SimplePaginatorBundle",
-
-    "extra": {
-        "branch-alias": {
-            "dev-master": "1.0.x-dev"
-        }
-    }
+    "target-dir": "Ideup/SimplePaginatorBundle"
 }
