@@ -30,7 +30,7 @@ class PaginatorExtension extends \Twig_Extension
     public function getFunctions()
     {
         return array(
-            'simple_paginator_render'   => new \Twig_Function_Method($this, 'render', array('is_safe' => array('html')))
+            'simple_paginator_render' => new \Twig_SimpleFunction('render', array($this, 'render'), array('is_safe' => array('html')))
         );
     }
 
