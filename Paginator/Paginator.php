@@ -3,7 +3,7 @@
 namespace Ideup\SimplePaginatorBundle\Paginator;
 
 use
-    Symfony\Component\HttpFoundation\Request,
+ Symfony\Component\HttpFoundation\RequestStack,
     Ideup\SimplePaginatorBundle\Paginator\Adapter\AdapterFactory
 ;
 
@@ -40,14 +40,16 @@ class Paginator
     protected $adapterFactory;
 
     /**
-     * @param Symfony\Component\HttpFoundation\Request $request
+     * @param Symfony\Component\HttpFoundation\RequestStack $requestStack
      * @param Ideup\SimplePaginatorBundle\Paginator\Adapter\AdapterFactory $adapterFactory
      */
-    public function __construct(Request $request, AdapterFactory $adapterFactory)
+    public function __construct(RequestStack $requestStack, AdapterFactory $adapterFactory)
     {
         $this->adapterFactory = $adapterFactory;
+        $request = $this->RequestStack = $requestStack->getCurrentRequest();
 
         $paginatorId = $request->get('paginatorId');
+//        \Symfony\Component\VarDumper\VarDumper::dump( $request->get());die();
         $this->setFallbackValues();
 
         $page = (int)$request->get('page');

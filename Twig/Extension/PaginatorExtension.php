@@ -30,7 +30,7 @@ class PaginatorExtension extends \Twig_Extension
     public function getFunctions()
     {
         return array(
-            'simple_paginator_render'   => new \Twig_Function_Method($this, 'render', array('is_safe' => array('html')))
+            'simple_paginator_render' => new \Twig_SimpleFunction('renderView', array($this, 'renderView'), array('is_safe' => array('html')))
         );
     }
 
@@ -43,7 +43,7 @@ class PaginatorExtension extends \Twig_Extension
      *  @param string $view
      *  @return string
      */
-    public function render($route, $id = null, $options = array(), $view = null)
+    public function renderView($route, $id = null, $options = array(), $view = null)
     {
         return $this->pagebar->render($route, $id, $options, $view);
     }

@@ -12,8 +12,8 @@
   <services>
       <service id="ideup.simple_paginator.adapter_factory" class="%simple_paginator_adapter_factory.class%">
       </service>
-      <service id="ideup.simple_paginator" class="%simple_paginator.class%" scope="request">
-          <argument type="service" id="request" />
+      <service id="ideup.simple_paginator" class="%simple_paginator.class%" >
+          <argument type="service" id="request_stack" />
           <argument type="service" id="ideup.simple_paginator.adapter_factory" />
       </service>
   </services>
